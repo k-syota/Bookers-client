@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import useSWR from 'swr'
+import axios from './lib/axios';
 
-function App() {
+const App = () => {
+  const { data, error } = useSWR('/api/hello', () =>
+    axios
+      .get('/api/hello')
+      .then((res: any) => res.data)
+  )
+
+  console.log(error)
+
+  if (error) return <div>エラーが発生しました</div>
+  if (!data) return <div>読み込み中</div>
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>ようこそ</h1>
+      <p>{data}</p>
     </div>
-  );
+  )
 }
 
 export default App;
